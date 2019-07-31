@@ -1,3 +1,5 @@
+from utils.logger import logger
+
 from skimage import segmentation
 import numpy as np
 import cv2
@@ -13,8 +15,7 @@ def superpixel(cv2_img, debug = True):
     labels = segmentation.slic(cv2_img, n_segments=1111, compactness=10)
     unique_ids = np.unique(labels)
 
-    if debug:
-        print('this image has {} unique superpixels'.format(len(unique_ids)))
+    logger.debug('this image has {} unique superpixels'.format(len(unique_ids)))
 
     return labels, unique_ids
 
