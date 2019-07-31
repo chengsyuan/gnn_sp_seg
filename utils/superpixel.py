@@ -20,7 +20,7 @@ def superpixel(cv2_img, debug = True):
 
 def rend_superpixel(labels, random_seed = 888):
     """
-
+    input the labels of the picture, return a [h, w, 3] RGB image for visualization
     :param labels:       [h, w] numpy array
     :param random_seed:  default is 888 for reproduce
     :return:
@@ -37,10 +37,7 @@ if __name__ == '__main__':
     cv2_img = cv2.imread('../example_images/2007_000123.jpg')
 
     labels, unique_ids = superpixel(cv2_img, debug=True)
-
-    print(labels.shape)
     im_target_rgb = rend_superpixel(labels)
-
 
     cv2.imshow('image', cv2_img)
     cv2.imshow('superpixel_image', im_target_rgb)
