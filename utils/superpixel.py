@@ -1,3 +1,4 @@
+from utils.conf import conf
 from utils.logger import logger
 
 from skimage import segmentation
@@ -19,7 +20,7 @@ def superpixel(cv2_img, debug = True):
 
     return labels, unique_ids
 
-def rend_superpixel(labels, random_seed = 888):
+def rend_superpixel(labels, random_seed = conf.init_seed):
     """
     input the labels of the picture, return a [h, w, 3] RGB image for visualization
     :param labels:       [h, w] numpy array
@@ -39,6 +40,13 @@ if __name__ == '__main__':
 
     labels, unique_ids = superpixel(cv2_img, debug=True)
     im_target_rgb = rend_superpixel(labels)
+
+    vs_right = np.vstack([labels[:, :-1].ravel(), labels[:, 1:].ravel()])
+    vs_below = np.vstack([labels[:-1, :].ravel(), labels[1:, :].ravel()])
+    bneighbors = np.unique(np.hstack([vs_right, vs_below]) * (vs_right != vs_below), axis=1)
+    print((vs_right != vs_below))
+    np.con
+    print(bneighbors)
 
     cv2.imshow('image', cv2_img)
     cv2.imshow('superpixel_image', im_target_rgb)
