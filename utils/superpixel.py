@@ -35,18 +35,31 @@ def rend_superpixel(labels, random_seed = conf.init_seed):
 
     return im_target_rgb
 
+def superpixel_edge_list(labels):
+    """
+    get edge list given the superpixel labels
+    :param labels: [h, w] numpy array
+    :return: bneighbors [[start_nodes], [end_nodes]]
+    """
+    # get the right/below adjacent node by shift right/down
+    vs_right = np.vstack([labels[:, :-1].ravel(), labels[:, 1:].ravel()])
+    vs_below = np.vstack([labels[:-1, :].ravel(), labels[1:, :].ravel()])
+
+    # reverse the edge list to get a bidirectional edge list
+    bneighbors = np.unique(np.hstack([vs_right, np.flip(vs_right, axis=0),
+                                      vs_below, np.flip(vs_below, axis=0)]), axis=1)
+
+    # mask self-to-self edges
+    mask = np.not_equal(bneighbors[0], bneighbors[1])
+    bneighbors = bneighbors[:, mask]
+
+    return bneighbors
+
 if __name__ == '__main__':
     cv2_img = cv2.imread('../example_images/2007_000123.jpg')
 
     labels, unique_ids = superpixel(cv2_img, debug=True)
     im_target_rgb = rend_superpixel(labels)
-
-    vs_right = np.vstack([labels[:, :-1].ravel(), labels[:, 1:].ravel()])
-    vs_below = np.vstack([labels[:-1, :].ravel(), labels[1:, :].ravel()])
-    bneighbors = np.unique(np.hstack([vs_right, vs_below]) * (vs_right != vs_below), axis=1)
-    print((vs_right != vs_below))
-    np.con
-    print(bneighbors)
 
     cv2.imshow('image', cv2_img)
     cv2.imshow('superpixel_image', im_target_rgb)
