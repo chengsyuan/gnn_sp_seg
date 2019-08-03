@@ -5,5 +5,4 @@ class conf():
     batch_size = 4          # ToChange
 
     init_seed = 666
-    cuda = False
     multi_gpu = False

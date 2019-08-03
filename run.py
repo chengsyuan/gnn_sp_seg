@@ -36,12 +36,12 @@ logger.info("model, loss, optim is ready")
 |  |      |  |\  \----.|  |____ |  |     /  _____  \  |  |\  \----.|  |____ 
 | _|      | _| `._____||_______|| _|    /__/     \__\ | _| `._____||_______|
 """
-if conf.cuda:
-    cudnn.benchmark = True
-    if conf.multi_gpu:
-        model = nn.DataParallel(model)
-    model = model.cuda()
-    loss = loss.cuda()
+# cudnn.benchmark = True
+if conf.multi_gpu:
+    model = nn.DataParallel(model)
+model = model.cuda()
+
+loss = loss.cuda()
 logger.info('model is ready to train / infer')
 
 
@@ -53,12 +53,13 @@ logger.info('model is ready to train / infer')
     |  |     |  |\  \----./  _____  \  |  | |  |\   | 
     |__|     | _| `._____/__/     \__\ |__| |__| \__| 
 """
-for (image, mask, labels, edges) in train_dataset:
-    # aaa = i[0].unsqueeze(0)
-    # print(model(aaa))
-
-    show_my_result(image, mask, labels)
-    print(edges)
+for (image, mask, labels, edges, sp_size) in train_dataset:
+    (image, mask, labels, edges, sp_size) = (image.cuda(), mask.cuda(), labels.cuda(), edges, sp_size)
+    # show_my_result(image, mask, labels)
+    # print(edges)
+    image = image.unsqueeze(0)
+    logits = model(image, labels, edges, sp_size)
+    print(logits)
 
     break
 

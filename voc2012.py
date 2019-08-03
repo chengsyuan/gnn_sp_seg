@@ -54,14 +54,14 @@ class myVOC2012(Dataset):
 
         labels, unique_ids = superpixel(image, debug=True)
         # print(labels)
-        
+
         edges = superpixel_edge_list(labels)
         mask = self.mask_trans(mask)
         image = self.image_trans(image)
         labels = self.label_trans(labels)
 
 
-        return (image, mask, labels, edges)
+        return (image, mask, labels, edges, len(unique_ids))
 
     def __len__(self):
         return len(self.train_dataset.images)
