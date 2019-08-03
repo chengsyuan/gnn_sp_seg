@@ -1,7 +1,9 @@
 from torch.backends import cudnn
 
+from utils import visualizer
 from utils.conf import conf
 from utils.logger import logger
+from utils.visualizer import show_my_result
 
 from voc2012 import *
 from models.experiment_model_1 import model
@@ -51,11 +53,12 @@ logger.info('model is ready to train / infer')
     |  |     |  |\  \----./  _____  \  |  | |  |\   | 
     |__|     | _| `._____/__/     \__\ |__| |__| \__| 
 """
-for i in train_loader:
+for (image, mask, labels, edges) in train_dataset:
     # aaa = i[0].unsqueeze(0)
     # print(model(aaa))
-    print(i[0].size())
-    print(i[1].size())
-    print(i[2].size())
+
+    show_my_result(image, mask, labels)
+    print(edges)
+
     break
 

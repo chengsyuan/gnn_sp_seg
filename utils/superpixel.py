@@ -2,10 +2,11 @@ from utils.conf import conf
 from utils.logger import logger
 
 from skimage import segmentation
+from skimage.future import graph
 import numpy as np
 import cv2
 
-def superpixel(cv2_img, debug = True):
+def superpixel(cv2_img, n_segments=1111, compactness = 10, normalized_cut = False, debug = True):
     """
     parameters like 1111 and 10 are selected by my intuition
     :param cv2_img:  cv2.imread('../example_images/2007_000039.jpg')
@@ -13,7 +14,15 @@ def superpixel(cv2_img, debug = True):
     :return: labels: [h,w] numpy array, unique_ids: [0, 1, ..., superpixel_n - 1]
     """
 
-    labels = segmentation.slic(cv2_img, n_segments=1111, compactness=10)
+    # labels = segmentation.slic(cv2_img, n_segments=1111, compactness=10)
+    labels = segmentation.slic(cv2_img,
+                               n_segments=n_segments,
+                               compactness=compactness)
+
+    if normalized_cut:
+        g = graph.rag_mean_color(cv2_img, labels, mode='similarity')
+        labels = graph.cut_normalized(labels, g)
+
     unique_ids = np.unique(labels)
 
     logger.debug('this image has {} unique superpixels'.format(len(unique_ids)))
@@ -56,9 +65,9 @@ def superpixel_edge_list(labels):
     return bneighbors
 
 if __name__ == '__main__':
-    cv2_img = cv2.imread('../example_images/2007_000123.jpg')
+    cv2_img = cv2.imread('../example_images/2007_000032.jpg')
 
-    labels, unique_ids = superpixel(cv2_img, debug=True)
+    labels, unique_ids = superpixel(cv2_img, normalized_cut=True, debug=True)
     im_target_rgb = rend_superpixel(labels)
     edgelist = superpixel_edge_list(labels)
     logger.debug(edgelist)
