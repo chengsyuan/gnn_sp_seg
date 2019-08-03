@@ -52,6 +52,7 @@ logger.info('model is ready to train / infer')
     |__|     | _| `._____/__/     \__\ |__| |__| \__| 
 """
 for i in train_dataset:
-    print(i[1].show())
+    aaa = i[0].unsqueeze(0)
+    print(model(aaa))
     break
 
