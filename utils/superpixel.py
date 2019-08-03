@@ -60,6 +60,8 @@ if __name__ == '__main__':
 
     labels, unique_ids = superpixel(cv2_img, debug=True)
     im_target_rgb = rend_superpixel(labels)
+    edgelist = superpixel_edge_list(labels)
+    logger.debug(edgelist)
 
     cv2.imshow('image', cv2_img)
     cv2.imshow('superpixel_image', im_target_rgb)
