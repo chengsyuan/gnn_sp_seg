@@ -42,14 +42,22 @@ class GCN(nn.Module):
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.gcn1 = GCN(64, 64, F.relu)
-        self.gcn2 = GCN(64, 32, F.relu)
-        self.gcn3 = GCN(32, 21, F.relu)
+        self.gcn1 = GCN(64, 128, F.relu)
+        self.gcn2 = GCN(128, 256, F.relu)
+        self.gcn3 = GCN(256, 256, F.relu)
+        self.gcn4 = GCN(256, 128, F.relu)
+        self.gcn5 = GCN(128, 64, F.relu)
+        self.gcn6 = GCN(64, 32, F.relu)
+        self.gcn7 = GCN(32, 21, F.relu)
 
     def forward(self, g, features):
         x = self.gcn1(g, features)
         x = self.gcn2(g, x)
         x = self.gcn3(g, x)
+        x = self.gcn4(g, x)
+        x = self.gcn5(g, x)
+        x = self.gcn6(g, x)
+        x = self.gcn7(g, x)
         return x
 
 
