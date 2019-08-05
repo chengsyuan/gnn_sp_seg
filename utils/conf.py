@@ -1,6 +1,6 @@
 class conf():
-    level = 'DEBUG'
-    # level = 'INFO'
+    # level = 'DEBUG'
+    level = 'INFO'
 
     batch_size = 4          # ToChange
 

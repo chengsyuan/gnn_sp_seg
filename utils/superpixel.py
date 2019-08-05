@@ -6,7 +6,8 @@ from skimage.future import graph
 import numpy as np
 import cv2
 
-def superpixel(cv2_img, n_segments=1111, compactness = 10, normalized_cut = False, debug = True):
+def superpixel(cv2_img, n_segments=1111,
+               compactness = 10, normalized_cut = False, debug = True):
     """
     parameters like 1111 and 10 are selected by my intuition
     :param cv2_img:  cv2.imread('../example_images/2007_000039.jpg')
